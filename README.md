@@ -23,6 +23,9 @@ Then click button it will encrypt or decrypt for you.
 ## Decrypt Image
 ![Decrypt_Image](image/decrypt_image.png)
 
+## Preview Feature
+![preview](image/preview.png)
+
 # Log
 ## Ver0.1
 * Feature
