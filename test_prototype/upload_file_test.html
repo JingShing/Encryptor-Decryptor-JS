@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>File Reader</title>
+  <meta charset="utf-8">
+  <script>
+    function handleFileSelect(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+
+      var files = evt.dataTransfer.files || evt.target.files;
+      var file = files[0];
+
+      var reader = new FileReader();
+      reader.onload = function(event) {
+        document.getElementById('content').value = event.target.result;
+      };
+      reader.readAsText(file);
+    }
+
+    function handleDragOver(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+      evt.dataTransfer.dropEffect = 'copy';
+    }
+  </script>
+</head>
+<body>
+  <form>
+    <input type="file" id="fileInput" style="display:none">
+    <label for="fileInput">選擇文件</label>
+    <br>
+    <textarea id="content" rows="10" cols="50"></textarea>
+  </form>
+
+  <script>
+    var dropZone = document.querySelector('textarea');
+    dropZone.addEventListener('dragover', handleDragOver, false);
+    dropZone.addEventListener('drop', handleFileSelect, false);
+
+    var fileInput = document.querySelector('#fileInput');
+    fileInput.addEventListener('change', handleFileSelect, false);
+  </script>
+</body>
+</html>
