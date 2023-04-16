@@ -15,8 +15,18 @@ Then click button it will encrypt or decrypt for you.
 ## Decrypt
 ![Encrypt](image/decrypt.png)
 
+## Encrypt Image
+![Encrypt_Image](image/encrypt_image.png)
+## Decrypt Image
+![Decrypt_Image](image/decrypt_image.png)
+
 # Log
 ## Ver0.1
 * Feature
   * encrypt from textfield
   * decrypt from textfield
+## Ver0.2
+* Feature
+  * You can now drag your file into the textfield.
+  * Now support txt, jpg and png file.
+  * It can now encrypt image file.
