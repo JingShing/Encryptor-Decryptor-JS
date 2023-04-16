@@ -4,18 +4,29 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Encryptor-Decryptor</title>
 </head>
 <body>
-    <p><label for="content">Content:</label></p>
-    <textarea id="content" name="content" rows="10" cols="50"></textarea>
-    <p><label for="key">Key:</label></p>
-    <textarea id="key" name="key" rows="10" cols="50"></textarea>
-    <br>
-    <button onclick="encrypt_button()">Encrypt</button>
-    <button onclick="decrypt_button()">Decrypt</button>
-    <p><label for="output">Output:</label></p>
-    <textarea id="output" name="output" rows="10" cols="50"></textarea>
+    <p>This tool is made by <a href="https://jingshing.com/">JingShing</a>.</p>
+    <p>You can drag your file in the content or key to input the text. It is allow to use txt, jpg and png file.</p>
+    <form id = "all_file_input">
+        <input type="file" id="fileInput_content" style="display:none">
+        <p><label for="fileInput_content">Content(Select File):</label></p>
+        <textarea id="content" rows="10" cols="50"></textarea>
+        <br>
+        <input type="file" id="fileInput_key" style="display:none">
+        <p><label for="fileInput_key">Key(Select File):</label></p>
+        <textarea id="key" rows="10" cols="50"></textarea>
+        <br>
+        <button onclick="encrypt_button();return false;">Encrypt</button>
+        <button onclick="decrypt_button();return false;">Decrypt</button>
+        <p><label>Output</label></p>
+        <br>
+        <textarea id="output" rows="10" cols="50"></textarea>
+        <br>
+        Compressed Image：<span id="sz"></span><br>
+        <img id="pic" >
+      </form>
 </body>
 <script>
 
@@ -51,6 +62,7 @@ function encrypt(line, key) {
     en_str += temp;
   }
   const s1 = btoa(en_str);
+  setBase64Image(s1);
   return s1;
 }
 
@@ -65,6 +77,7 @@ function decrypt(line, key) {
     const temp = String.fromCharCode(parseInt(p_split[i]) - j.charCodeAt(0)); // decryption = (encryption Unicode character - key Unicode) character
     de_str += temp;
   }
+  setBase64Image(de_str);
   return de_str;
 }
 
@@ -84,5 +97,93 @@ function list_decrypt(data, key) {
   return de_list;
 }
 
+// drag and drop
+function handleDragOver(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+      evt.dataTransfer.dropEffect = 'copy';
+    }
+var dropZone = document.querySelector('#content');
+dropZone.addEventListener('dragover', handleDragOver, false);
+dropZone.addEventListener('drop', handleFileSelect, false);
+
+var fileInput = document.querySelector('#fileInput_content');
+fileInput.addEventListener('change', handleFileSelect, false);
+
+var dropZone2 = document.querySelector('#key');
+dropZone2.addEventListener('dragover', handleDragOver, false);
+dropZone2.addEventListener('drop', handleFileSelect, false);
+
+var fileInput2 = document.querySelector('#fileInput_key');
+fileInput2.addEventListener('change', handleFileSelect, false);
+
+
+function handleFileSelect(evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
+    var new_id = "";
+    var old_id = String(event.target.id);
+    if(old_id.includes("fileInput")){
+        var file = evt.target.files[0];
+        if(old_id.includes("content"))new_id = "content";
+        else if(old_id.includes("key"))new_id = "key";
+    }
+    else{
+        var file = evt.dataTransfer.files[0];
+        new_id = old_id;
+    }
+    var file_name = file.name;
+
+    if(file_name.includes(".png")||file_name.includes(".jpg")){
+        cutImageBase64(file, null, 900, 0.7, new_id);
+    }
+    else{
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            document.getElementById(new_id).value = event.target.result;
+        };
+        reader.readAsText(file);
+    }
+    clearAllInput();
+}
+function clearAllInput(){
+var inputs = document.getElementsByTagName("input");
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].value = "";
+    }
+}
+
+// image
+function cutImageBase64(m_this,id,wid,quality, output_id) {
+    var file = m_this;
+    var URL = window.URL || window.webkitURL;
+    var blob = URL.createObjectURL(file);
+    var base64;
+    var img = new Image();
+    img.src = blob;
+    img.onload = function() {
+        var that = this;
+        //size
+        var w = that.width,
+            h = that.height,
+            scale = w / h;
+            w = wid || w;
+            h = w / scale;
+        //generate canvas
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        canvas.width = w;
+        canvas.height = h;
+        ctx.drawImage(that, 0, 0, w, h);
+        // generate base64
+        if(file.name.includes('.jpg'))base64 = canvas.toDataURL('image/jpeg', quality || 0.9);
+        else if(file.name.includes('.png'))base64 = canvas.toDataURL('image/png', quality || 0.9);
+        document.getElementById(output_id).value = base64;
+    };
+}
+function setBase64Image(base64){
+    document.getElementById("pic").src=base64;
+    document.getElementById("sz").innerHTML = parseInt(base64.length/2014,0) + "kb";
+}
 </script>
 </html>
