@@ -17,8 +17,18 @@
 ## Decrypt解密
 ![Encrypt](image/decrypt.png)
 
+## Encrypt Image加密圖片
+![Encrypt_Image](image/encrypt_image.png)
+## Decrypt Image解密圖片
+![Decrypt_Image](image/decrypt_image.png)
+
 # Log紀錄
 ## Ver0.1
 * 功能
   * 透過文字框加密
   * 透過文字框解密
+## Ver0.2
+* 功能
+  * 你可以拖拉檔案到文字框讀取檔案內的內容
+  * 現已支持 txt, png 和 jpg 檔
+  * 現已支持圖片的加密解密
