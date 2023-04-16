@@ -14,6 +14,8 @@
             cutImageBase64(m_this,null,900,0.7);
         })
         function cutImageBase64(m_this,id,wid,quality) {
+            // quality 0.1~1
+            
             var file = m_this.files[0];
             var URL = window.URL || window.webkitURL;
             var blob = URL.createObjectURL(file);
