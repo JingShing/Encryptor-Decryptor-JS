@@ -37,3 +37,6 @@ Then click button it will encrypt or decrypt for you.
 * Feature
   * You can now use [this tool on my website](https://jingshing.com/encrypt_decrypt/).
   * I upgrade my encrypt and decrypt algorithm. To make it lighter and safer.
+## Ver0.4
+* Feature
+  * Generate preview
