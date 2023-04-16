@@ -1,5 +1,8 @@
 English | [繁體中文](README_TCH.md)
 
+# [Online Tool](https://jingshing.com/encrypt_decrypt/)
+You can use this tool on [my website](https://jingshing.com/encrypt_decrypt/).
+
 # Encryptor-Decryptor-JS
 Using Javascript and Html to rewrite my old Encryptor-Decryptor.
 
