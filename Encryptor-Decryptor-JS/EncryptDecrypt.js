@@ -22,31 +22,31 @@ function key_line_len(line, key) {
 
 // encryption
 function encrypt(line, key) {
-    key = key_line_len(line, key);
-    let en_str = "";
-    for (let i = 0; i < line.length; i++) {
+  key = key_line_len(line, key);
+  let en_str = "";
+  for (let i = 0; i < line.length; i++) {
     const j = key[i]; // i is data, j is key
-    const temp = String.fromCharCode(line.charCodeAt(i) + j.charCodeAt(0)); // encryption character = character Unicode + key Unicode
+    const temp = String(line.charCodeAt(i) + j.charCodeAt(0)) + '_'; // encryption character = character Unicode + key Unicode
     en_str += temp;
-    }
-    const s1 = btoa(en_str);
-    // setBase64Image(s1);
-    return s1;
+  }
+  const s1 = btoa(en_str);
+  setBase64Image(s1);
+  return s1;
 }
 
 // decryption
 function decrypt(line, key) {
-    key = key_line_len(line, key);
-    const p = atob(line);
-    let de_str = "";
-    for (let i = 0; i < p.length; i++) {
-        const j = key[i]; // i is data, j is key
-        const temp = String.fromCharCode(p.charCodeAt(i) - j.charCodeAt(0)); // decryption = (encryption Unicode character - key Unicode) character
-        de_str += temp;
-    }
-    setBase64Image(de_str);
-    generateBlurPreviewBase(de_str, -1, -1, 0.2, 2)
-    return de_str;
+  key = key_line_len(line, key);
+  const p = atob(line);
+  let de_str = "";
+  const p_split = p.split("_");
+  for (let i = 0; i < p_split.length - 1; i++) {
+    const j = key[i]; // i is data, j is key
+    const temp = String.fromCharCode(parseInt(p_split[i]) - j.charCodeAt(0)); // decryption = (encryption Unicode character - key Unicode) character
+    de_str += temp;
+  }
+  setBase64Image(de_str);
+  return de_str;
 }
 
 function list_encrypt(data, key) {
@@ -104,7 +104,6 @@ function handleFileSelect(evt) {
 
     if(file_name.includes(".png")||file_name.includes(".jpg")){
         cutImageBase64(file, null, 900, 0.7, new_id);
-        generateBlurPreviewFile(file, -1, -1, 0.2, 2);
     }
     else{
         var reader = new FileReader();
@@ -147,75 +146,11 @@ function cutImageBase64(m_this,id,wid,quality, output_id) {
         // generate base64
         if(file.name.includes('.jpg'))base64 = canvas.toDataURL('image/jpeg', quality || 0.9);
         else if(file.name.includes('.png'))base64 = canvas.toDataURL('image/png', quality || 0.9);
+        document.getElementById("pic").src = base64;
         document.getElementById(output_id).value = base64;
     };
 }
 function setBase64Image(base64){
     document.getElementById("pic").src=base64;
     document.getElementById("sz").innerHTML = parseInt(base64.length/2014,0) + "kb";
-}
-function generateBlurPreviewFile(file, width, height, quality, scale) {
-    output_id = "preview";
-    // quality is 0~1
-    // scale 1 means normal, 2 means 1/2 size
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function (event) {
-    const img = new Image();
-    img.src = event.target.result;
-    img.onload = function () {
-        if (width==-1 && height == -1){
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width/scale;
-            canvas.height = img.height/scale;
-            const ctx = canvas.getContext('2d');
-            ctx.filter = 'blur(5px)';
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            // return the preview as a base64 string
-            const preview = canvas.toDataURL('image/jpeg', quality);
-            document.getElementById(output_id).src = preview;
-        }
-        else{
-            const canvas = document.createElement('canvas');
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            ctx.filter = 'blur(5px)';
-            ctx.drawImage(img, 0, 0, width, height);
-            // return the preview as a base64 string
-            const preview = canvas.toDataURL('image/jpeg', quality);
-            document.getElementById(output_id).src = preview;
-        }
-    };
-  };
-}
-function generateBlurPreviewBase(base64String, width, height, quality, scale) {
-  output_id = "preview";
-  // quality is 0~1
-  // scale 1 means normal, 2 means 1/2 size
-  const img = new Image();
-  img.src = base64String;
-  img.onload = function () {
-    if (width == -1 && height == -1) {
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width / scale;
-      canvas.height = img.height / scale;
-      const ctx = canvas.getContext("2d");
-      ctx.filter = "blur(5px)";
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      // return the preview as a base64 string
-      const preview = canvas.toDataURL("image/jpeg", quality);
-      document.getElementById(output_id).src = preview;
-    } else {
-      const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext("2d");
-      ctx.filter = "blur(5px)";
-      ctx.drawImage(img, 0, 0, width, height);
-      // return the preview as a base64 string
-      const preview = canvas.toDataURL("image/jpeg", quality);
-      document.getElementById(output_id).src = preview;
-    }
-  };
 }
