@@ -4,15 +4,15 @@
     <meta charset="utf-8">
 </head>
 <body>
-        <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
-        <input id="file" type="file"  capture="microphone" accept="image/*"><br>
-        Compressed Image：<span id="sz"></span><br>
-        <img id="pic" >
-        <script>
-            $("#file").change(function(){
+    <input id="file" type="file"  capture="microphone" accept="image/*"><br>
+    Compressed Image：<span id="sz"></span><br>
+    <img id="pic" >
+    <script>
+        document.getElementById("file").addEventListener("change", function() {
             var m_this = this;
             cutImageBase64(m_this,null,900,0.7);
-        })
+        });
+
         function cutImageBase64(m_this,id,wid,quality) {
             // quality 0.1~1
             
@@ -33,10 +33,8 @@
                 //generate canvas
                 var canvas = document.createElement('canvas');
                 var ctx = canvas.getContext('2d');
-                $(canvas).attr({
-                    width: w,
-                    height: h
-                });
+                canvas.width = w;
+                canvas.height = h;
                 ctx.drawImage(that, 0, 0, w, h);
                 // generate base64
                 base64 = canvas.toDataURL('image/jpeg', quality || 0.9);
@@ -44,6 +42,6 @@
                 document.getElementById("sz").innerHTML = parseInt(base64.length/2014,0) + "kb";
             };
         }
-        </script>
-    </body>
+    </script>
+</body>
 </html>
