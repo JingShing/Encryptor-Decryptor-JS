@@ -14,3 +14,9 @@ Then click button it will encrypt or decrypt for you.
 ![Encrypt](image/encrypt.png)
 ## Decrypt
 ![Encrypt](image/decrypt.png)
+
+# Log
+## Ver0.1
+* Feature
+  * encrypt from textfield
+  * decrypt from textfield
