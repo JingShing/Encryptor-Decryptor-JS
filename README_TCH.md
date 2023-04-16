@@ -23,6 +23,9 @@
 ## Decrypt Image解密圖片
 ![Decrypt_Image](image/decrypt_image.png)
 
+## 預覽圖功能
+![preview](image/preview.png)
+
 # Log紀錄
 ## Ver0.1
 * 功能
