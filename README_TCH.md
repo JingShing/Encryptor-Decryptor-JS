@@ -16,3 +16,9 @@
 ![Encrypt](image/encrypt.png)
 ## Decrypt解密
 ![Encrypt](image/decrypt.png)
+
+# Log紀錄
+## Ver0.1
+* 功能
+  * 透過文字框加密
+  * 透過文字框解密
