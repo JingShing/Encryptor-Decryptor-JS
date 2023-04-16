@@ -4,19 +4,6 @@
   <title>File Reader</title>
   <meta charset="utf-8">
   <script>
-    function handleFileSelect(evt) {
-      evt.stopPropagation();
-      evt.preventDefault();
-
-      var files = evt.dataTransfer.files || evt.target.files;
-      var file = files[0];
-
-      var reader = new FileReader();
-      reader.onload = function(event) {
-        document.getElementById('content').value = event.target.result;
-      };
-      reader.readAsText(file);
-    }
 
     function handleDragOver(evt) {
       evt.stopPropagation();
@@ -26,20 +13,57 @@
   </script>
 </head>
 <body>
-  <form>
+  <form id = "all_file_input">
     <input type="file" id="fileInput" style="display:none">
     <label for="fileInput">選擇文件</label>
     <br>
     <textarea id="content" rows="10" cols="50"></textarea>
+    <br>
+    <input type="file" id="fileInput2" style="display:none">
+    <label for="fileInput2">選擇文件</label>
+    <br>
+    <textarea id="content2" rows="10" cols="50"></textarea>
   </form>
 
   <script>
-    var dropZone = document.querySelector('textarea');
+    var dropZone = document.querySelector('#content');
     dropZone.addEventListener('dragover', handleDragOver, false);
     dropZone.addEventListener('drop', handleFileSelect, false);
 
     var fileInput = document.querySelector('#fileInput');
     fileInput.addEventListener('change', handleFileSelect, false);
+
+    var dropZone2 = document.querySelector('#content2');
+    dropZone2.addEventListener('dragover', handleDragOver, false);
+    dropZone2.addEventListener('drop', handleFileSelect, false);
+
+    var fileInput2 = document.querySelector('#fileInput2');
+    fileInput2.addEventListener('change', handleFileSelect, false);
+
+    
+    function handleFileSelect(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+      console.log(event.target.id);
+      var new_id = "";
+      var old_id = event.target.id;
+      console.log(typeof old_id);
+      //   if(old_id.inclueds("fileInput")){
+          //     var file = evt.target.files[0];
+          //     if(old_id.inclueds("1"))new_id = "content";
+          //     else if(old_id.inclueds("2"))new_id = "content2";
+          //   }
+          //   else{
+              //     var file = evt.dataTransfer.files[0];
+              //   }
+              
+              //   var reader = new FileReader();
+              //   reader.onload = function(event) {
+                  //     document.getElementById(new_id).value = event.target.result;
+                  //   };
+                  //   reader.readAsText(file);
+        document.getElementById("all_file_input").reset();
+    }
   </script>
 </body>
 </html>
