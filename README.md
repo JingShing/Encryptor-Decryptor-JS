@@ -33,3 +33,7 @@ Then click button it will encrypt or decrypt for you.
   * You can now drag your file into the textfield.
   * Now support txt, jpg and png file.
   * It can now encrypt image file.
+## Ver0.3
+* Feature
+  * You can now use [this tool on my website](https://jingshing.com/encrypt_decrypt/).
+  * I upgrade my encrypt and decrypt algorithm. To make it lighter and safer.
