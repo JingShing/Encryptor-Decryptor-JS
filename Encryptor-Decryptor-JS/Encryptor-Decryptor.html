@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p><label for="content">Content:</label></p>
+    <textarea id="content" name="content" rows="10" cols="50"></textarea>
+    <p><label for="key">Key:</label></p>
+    <textarea id="key" name="key" rows="10" cols="50"></textarea>
+    <button onclick="encrypt_button()">Encrypt</button>
+    <button onclick="decrypt_button()">Decrypt</button>
+    <p><label for="output">Output:</label></p>
+    <textarea id="output" name="output" rows="10" cols="50"></textarea>
+</body>
+<script>
+
+function encrypt_button(){
+    let line = document.getElementById("content").value;
+    let key = document.getElementById("key").value;
+    document.getElementById("output").value = encrypt(line, key);
+}
+function decrypt_button(){
+    let line = document.getElementById("content").value;
+    let key = document.getElementById("key").value;
+    document.getElementById("output").value = decrypt(line, key);
+}
+
+function key_line_len(line, key) {
+  if (key.length > 0) {
+    while (key.length < line.length) {
+      key += key;
+    }
+  } else {
+    key = key_line_len(line, 'RRR'); // default key
+  }
+  return key;
+}
+
+// encryption
+function encrypt(line, key) {
+  key = key_line_len(line, key);
+  let en_str = "";
+  for (let i = 0; i < line.length; i++) {
+    const j = key[i]; // i is data, j is key
+    const temp = String(line.charCodeAt(i) + j.charCodeAt(0)) + '_'; // encryption character = character Unicode + key Unicode
+    en_str += temp;
+  }
+  const s1 = btoa(en_str);
+  return s1;
+}
+
+// decryption
+function decrypt(line, key) {
+  key = key_line_len(line, key);
+  const p = atob(line);
+  let de_str = "";
+  const p_split = p.split("_");
+  for (let i = 0; i < p_split.length - 1; i++) {
+    const j = key[i]; // i is data, j is key
+    const temp = String.fromCharCode(parseInt(p_split[i]) - j.charCodeAt(0)); // decryption = (encryption Unicode character - key Unicode) character
+    de_str += temp;
+  }
+  return de_str;
+}
+
+function list_encrypt(data, key) {
+  const en_list = [];
+  for (const line of data) {
+    en_list.push(encrypt(line, key));
+  }
+  return en_list;
+}
+
+function list_decrypt(data, key) {
+  const de_list = [];
+  for (const line of data) {
+    de_list.push(decrypt(line, key));
+  }
+  return de_list;
+}
+
+</script>
+</html>
