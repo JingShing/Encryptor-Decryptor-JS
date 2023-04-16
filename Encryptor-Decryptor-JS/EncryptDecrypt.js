@@ -22,31 +22,30 @@ function key_line_len(line, key) {
 
 // encryption
 function encrypt(line, key) {
-  key = key_line_len(line, key);
-  let en_str = "";
-  for (let i = 0; i < line.length; i++) {
+    key = key_line_len(line, key);
+    let en_str = "";
+    for (let i = 0; i < line.length; i++) {
     const j = key[i]; // i is data, j is key
-    const temp = String(line.charCodeAt(i) + j.charCodeAt(0)) + '_'; // encryption character = character Unicode + key Unicode
+    const temp = String.fromCharCode(line.charCodeAt(i) + j.charCodeAt(0)); // encryption character = character Unicode + key Unicode
     en_str += temp;
-  }
-  const s1 = btoa(en_str);
-  setBase64Image(s1);
-  return s1;
+    }
+    const s1 = btoa(en_str);
+    setBase64Image(s1);
+    return s1;
 }
 
 // decryption
 function decrypt(line, key) {
-  key = key_line_len(line, key);
-  const p = atob(line);
-  let de_str = "";
-  const p_split = p.split("_");
-  for (let i = 0; i < p_split.length - 1; i++) {
+    key = key_line_len(line, key);
+    const p = atob(line);
+    let de_str = "";
+    for (let i = 0; i < p.length; i++) {
     const j = key[i]; // i is data, j is key
-    const temp = String.fromCharCode(parseInt(p_split[i]) - j.charCodeAt(0)); // decryption = (encryption Unicode character - key Unicode) character
+    const temp = String.fromCharCode(p.charCodeAt(i) - j.charCodeAt(0)); // decryption = (encryption Unicode character - key Unicode) character
     de_str += temp;
-  }
-  setBase64Image(de_str);
-  return de_str;
+    }
+    setBase64Image(de_str);
+    return de_str;
 }
 
 function list_encrypt(data, key) {
