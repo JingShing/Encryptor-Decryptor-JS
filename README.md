@@ -43,3 +43,5 @@ Then click button it will encrypt or decrypt for you.
 ## Ver0.4
 * Feature
   * Generate preview
+## Ver0.5
+* Improved code: mix file and base64 input code.
