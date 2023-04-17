@@ -22,31 +22,32 @@ function key_line_len(line, key) {
 
 // encryption
 function encrypt(line, key) {
-  key = key_line_len(line, key);
-  let en_str = "";
-  for (let i = 0; i < line.length; i++) {
+    key = key_line_len(line, key);
+    let en_str = "";
+    for (let i = 0; i < line.length; i++) {
     const j = key[i]; // i is data, j is key
-    const temp = String(line.charCodeAt(i) + j.charCodeAt(0)) + '_'; // encryption character = character Unicode + key Unicode
+    const temp = String.fromCharCode(line.charCodeAt(i) + j.charCodeAt(0)); // encryption character = character Unicode + key Unicode
     en_str += temp;
-  }
-  const s1 = btoa(en_str);
-  setBase64Image(s1);
-  return s1;
+    }
+    const s1 = btoa(en_str);
+    // setBase64Image(s1);
+    return s1;
 }
 
 // decryption
 function decrypt(line, key) {
-  key = key_line_len(line, key);
-  const p = atob(line);
-  let de_str = "";
-  const p_split = p.split("_");
-  for (let i = 0; i < p_split.length - 1; i++) {
-    const j = key[i]; // i is data, j is key
-    const temp = String.fromCharCode(parseInt(p_split[i]) - j.charCodeAt(0)); // decryption = (encryption Unicode character - key Unicode) character
-    de_str += temp;
-  }
-  setBase64Image(de_str);
-  return de_str;
+    key = key_line_len(line, key);
+    const p = atob(line);
+    let de_str = "";
+    for (let i = 0; i < p.length; i++) {
+        const j = key[i]; // i is data, j is key
+        const temp = String.fromCharCode(p.charCodeAt(i) - j.charCodeAt(0)); // decryption = (encryption Unicode character - key Unicode) character
+        de_str += temp;
+    }
+    setBase64Image(de_str);
+    generateBlurPreview(de_str, -1, -1, 0.2, 2, "preview")
+    // pixelateImageBase(de_str, 2, "preview");
+    return de_str;
 }
 
 function list_encrypt(data, key) {
@@ -104,6 +105,8 @@ function handleFileSelect(evt) {
 
     if(file_name.includes(".png")||file_name.includes(".jpg")){
         cutImageBase64(file, null, 900, 0.7, new_id);
+        generateBlurPreview(file, -1, -1, 0.2, 2, "preview");
+        // pixelateImage(file, 4, "preview");
     }
     else{
         var reader = new FileReader();
@@ -154,3 +157,43 @@ function setBase64Image(base64){
     document.getElementById("pic").src=base64;
     document.getElementById("sz").innerHTML = parseInt(base64.length/2014,0) + "kb";
 }
+function generateBlurPreview(input, width, height, quality, scale, output_id) {
+    // quality is 0~1
+    // scale 1 means normal, 2 means 1/2 size
+    const img = new Image();
+    if(typeof input == "string"){
+        img.src = base64String;
+    }
+    else{
+        const reader = new FileReader();
+        reader.readAsDataURL(input);
+        reader.onload = function (event) {
+        img.src = event.target.result;
+        };
+    }
+
+    img.onload = function () {
+        if (width==-1 && height == -1){
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width/scale;
+            canvas.height = img.height/scale;
+            const ctx = canvas.getContext('2d');
+            ctx.filter = 'blur(5px)';
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            // return the preview as a base64 string
+            const preview = canvas.toDataURL('image/jpeg', quality);
+            document.getElementById(output_id).src = preview;
+        }
+        else{
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.filter = 'blur(5px)';
+            ctx.drawImage(img, 0, 0, width, height);
+            // return the preview as a base64 string
+            const preview = canvas.toDataURL('image/jpeg', quality);
+            document.getElementById(output_id).src = preview;
+        }
+    };
+};
